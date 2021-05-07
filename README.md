@@ -95,8 +95,6 @@ php artisan make:resource ItemCollection --collection
 
 - Fine-grained permission control for users. Laravel Sanctum allows us to assign `abilities` to tokens, where `abilities` could represent a group of permissions. This can be well used to achieve the goal of a fine-grained access control of APIs. 
 
-- Security considerations. If the APIs are for single page applications, Sanctum SPA authentication can be used to tighten the security. In addition, on production environment, a whitelisted domains should be defined for SPA authentication. Futhermore, CSRF should be added with the frontend by using sanctum/csrf-cookie. 
-
 - Basic validations have been added for the sample project, but for real projects, the validation should be more thorough depending on the specific requirements. 
 
 - Logging should be proper designed or implemented for production. For example, a third-party tool such as Datadog or Splunk could be used to receive the logs instead of local logs. 
@@ -110,6 +108,24 @@ php artisan make:resource ItemCollection --collection
     - API versioning: API versioning is not implemented in the sample project. But before starting a project, a proper versioning strategy needs to be designed.
     - Fallback routes: Customised fallback routes need to be defined for each set of APIs.
     - Rate Limits: To reduce the lost of being attacked, rate limits need to be added for APIs. 
+
+## Tips for font-end applications to call the APIs mainly about security considerations
+
+- If possible, a Single Page Application, which resides in the same top-level domain of the API project, should be the preferred approach of building the front-end application.
+
+    - Sanctum SPA authentication can be used to tighten the security. 
+
+    - On production environment, a whitelisted domains should be defined for SPA authentication. 
+
+    - CSRF should be added with the frontend by using sanctum/csrf-cookie. 
+
+- To benefit the performance, front-end should store and maintain the model if possible, and only communicate with backend APIs to sync the model when necessary. 
+
+- If token has to be used for the API authentication, Frontend should refresh the token frequently in order to protect token forgery. 
+
+- When calling the API, make suer `Accept: 'application/json'` is set in the request header. This could prevent errors causes by redirection. For example, the sample project may return a login html page if the token is correct. 
+
+- Whenever frontend needs to call backend APIs, frontend should take rate limits as a consideration. This could add another layer of preventing malicious attacks from the frontend. 
 
 ## License
 
