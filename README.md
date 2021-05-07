@@ -59,7 +59,7 @@ php artisan make:resource ItemCollection --collection
 
 - Run `./vendor/bin/sail artisan migrate` to create and update database tables. 
 
-- Run `./vendor/bin/sail test --testsuite=Feature` to perform Feature test cases. Note: as the sample project is not very complex, only feature test casese are implemented. For more complex project, unit tests, database tests, and other integration tests may be required.  
+- Run `./vendor/bin/sail test --testsuite=Feature` to perform Feature test cases. Note: as the sample project is not very complex, only feature test cases are implemented. For more complex project, unit tests, database tests, and other integration tests may be required.  
 
 ## Check the authentication and the APIs using Postman
 
@@ -81,19 +81,23 @@ php artisan make:resource ItemCollection --collection
 
 - Overview of the production docker: We've copied a set of widely-available docker configurations from the internet, and then we have fine-tuned and tested the configurations to fit the sample project. The entry point of the production docker configurations is `docker-compose-prod.yml`. 
 
+- Copy the env file from `env.prod`: `cp env.prod .env`. 
+
 - Build the `app` image by running `docker-compose -f docker-compose-prod.yml build app`
 
-- Start the containers: `docker-compose up -d`. 
+- Start the containers: `docker-compose -f docker-compose-prod.yml up -d`. 
 
 - Run the following commands to get the required packages, the db migration, and the key generated. 
 
   ```
-  docker-compose exec app composer install
-  docker-compose exec app php artisan migrate
-  docker-compose exec app php artisan key:generate
+  docker-compose -f docker-compose-prod.yml exec app composer install
+  docker-compose -f docker-compose-prod.yml exec app php artisan migrate
+  docker-compose -f docker-compose-prod.yml exec app php artisan key:generate
   ```
 
 - Open the URL http://localhost:8000/register to register a user. And then follow the same steps of the local environment to play with the APIs. 
+
+- To test APIs in `Postman`, the URLs in the imported `postman.json` need to be changed from http://localhost to http://localhost:8000. 
 
 ## Potential Improvements for commercial projects
 
