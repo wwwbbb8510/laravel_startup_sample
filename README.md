@@ -51,11 +51,15 @@ php artisan make:resource ItemCollection --collection
 
 - Prerequisites: `composer`, `docker`, `docker-compose` need to be installed first. 
 
-- Run `composer install` to install required packages. `sail` is one of them, which is extremely convenient for local environment.
+- Copy the env file from `env.sail`: `cp env.sail .env`. 
+
+- Run `composer install --dev` to install required packages. `sail` is one of them, which is extremely convenient for local environment.
 
 - Run `./vendor/bin/sail up` to start the docker containers defined in `docker-compose.yml`. 
 
-- Run `./vendor/bin/sail test` to perform Feature test cases. Note: as the sample project is not very complex, only feature test casese are implemented. For more complex project, unit tests, database tests, and other integration tests may be required.  
+- Run `./vendor/bin/sail artisan migrate` to create and update database tables. 
+
+- Run `./vendor/bin/sail test --testsuite=Feature` to perform Feature test cases. Note: as the sample project is not very complex, only feature test casese are implemented. For more complex project, unit tests, database tests, and other integration tests may be required.  
 
 ## Check the authentication and the APIs using Postman
 
@@ -68,6 +72,8 @@ php artisan make:resource ItemCollection --collection
 - Switch back to Postman, click `TokenCreate` request under `laravel_startup_sample` collection. Change the email and password to the ones used in the user registration. And then run the request to get an API token. 
 
 - After the `TokenCreate` step, the token is set up for all the API requests under `laravel_startup_sample` collection. Now, the other API requests in `Postman` can be played. 
+
+**Gotcha**: `{item_id}` for the following APIs -- `items.show, items.update, items.destroy` needs to be a valid `id` of the item in the database. The recommended way of playing the APIs through `Postman` is to call `items.store` API first to create several items, and keep the `ids` for other APIs. 
 
 ## Run the project in a production-ready container
 
